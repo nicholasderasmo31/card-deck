@@ -1,10 +1,18 @@
+
+
+//Secton 1: this gets my data from poke.json
 async function getPokemonData() {
+    //1a: fetches the file
     const response = await fetch('poke.json');
+
+    //1b: converts the Json text into javascript objects
     const data = await response.json();
     console.log(data);
 
+    //1c: Json wrapped
     const pokemonData = data.pokemon;
 
+    //1d: Loop through every pokemon in the array
     for (let i = 0; i < pokemonData.length; i++) {
         const p = new PokemonCard(
             pokemonData[i].name,
@@ -17,11 +25,14 @@ async function getPokemonData() {
     }
 }
 
+// Runs the function
 getPokemonData();
 
-
+//Section 2: pokemoncard class
 class PokemonCard {
+    //constructor part runs once for every card. Builds the html structure for one card.
     constructor(name, type, hp, bestMove, image) {
+        //Stores the pokemons data on the object
         this.name = name;
         this.type = type;
         this.hp = hp;
@@ -37,17 +48,18 @@ class PokemonCard {
         this.front.classList.add('card-face', 'card-front');
 
 
-
+//create the image element for card
         this.imageElement = document.createElement('img');
         this.imageElement.src = this.image;
         this.imageElement.alt = this.name;
 
+        //create text elements
         this.nameElement = document.createElement('h2');
         this.typeElement = document.createElement('p');
         this.hpElement = document.createElement('p');
         this.moveElement = document.createElement('p');
 
-        
+//puts everything into my front face
         this.front.appendChild(this.imageElement);
         this.front.appendChild(this.nameElement);
         this.front.appendChild(this.typeElement);
@@ -60,7 +72,7 @@ class PokemonCard {
 
 
 
-        //back face
+        //creates the back face
         this.back = document.createElement('div');
         this.back.classList.add('card-face', 'card-back');
 
@@ -68,11 +80,11 @@ class PokemonCard {
         backLabel.innerText = 'Pokemon';
         this.back.appendChild(backLabel);
 
-        //both faces go into this card
+        //attaches both faces to a single card
         this.cardElement.appendChild(this.front);
         this.cardElement.appendChild(this.back);
 
-
+//adds the flip on click
         const that = this;
         this.onClick = function () {
             that.flip();
@@ -91,7 +103,7 @@ class PokemonCard {
         this.hpElement.innerText = 'HP:' + this.hp;
         this.moveElement.innerText = 'Best move:' + this.bestMove;
     }
-
+//flips runs when the card is clicked on
     flip() {
         this.cardElement.classList.toggle('flipped');
     }
